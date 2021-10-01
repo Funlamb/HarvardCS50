@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
     //Check correct usage
     if(argc != 4){
         printf("Usage: ./sound SOURCE DESTINATION FACTOR\n");
-        return 1;
+        return 1;//Testing git
     }
     
     //open file to change
