@@ -32,10 +32,11 @@ int main(int argc, char *argv[])
         return 3;
     }
 
-    BYTE buffer;
-    while (fread(&buffer, sizeof(BYTE), 1, fileSource))
+    short buffer;
+    while (fread(&buffer, 1, 1, fileSource))
     {
-        fwrite(&buffer, sizeof(BYTE), 1, fileDestination);
+        fprintf(fileDestination, "%x ", buffer);
+        // fwrite(&buffer, sizeof(short), 1, fileDestination);
     }
     
     fclose(fileSource);
