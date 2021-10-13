@@ -23,23 +23,39 @@ int main(int argc, char *argv[])
     }
 
     //open destination file
-    FILE *fileDestination;
-    fileDestination = fopen(argv[2], "w");
-    if (!fileDestination)
-    {
-        printf("Could not open destination file.\n");
-        fclose(fileSource);
-        return 3;
-    }
+    // FILE *fileDestination;
+    // fileDestination = fopen(argv[2], "w");
+    // if (!fileDestination)
+    // {
+    //     printf("Could not open destination file.\n");
+    //     fclose(fileSource);
+    //     return 3;
+    // }
 
-    short buffer;
-    while (fread(&buffer, 1, 1, fileSource))
+    const int BLOCK_SIZE = 512; 
+    unsigned char buffer[BLOCK_SIZE];
+    int image_counter = 0;
+    FILE *output = NULL;
+    while (fread(&buffer, BLOCK_SIZE, 1, fileSource))
     {
-        fprintf(fileDestination, "%x ", buffer);
+        //Find if block starts a new jpg
+        if(buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0){
+            if(image_counter != 0 && output != NULL){
+                fclose(output);
+            }
+            char filename[8];
+            sprintf(filename, "%03i.jpg", image_counter);
+            output = fopen(filename, "w");
+            image_counter++;
+            // printf("Found 0xFF in front of 512 block. Number: %i\n", image_counter);
+        }
         // fwrite(&buffer, sizeof(short), 1, fileDestination);
+        if(output != NULL){
+            fwrite(&buffer, BLOCK_SIZE, 1, output);
+        }
     }
     
     fclose(fileSource);
-    fclose(fileDestination);
+    // fclose(fileDestination);
     return 0;
 }
