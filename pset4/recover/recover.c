@@ -1,25 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
-typedef uint8_t BYTE;
- 
+
 int main(int argc, char *argv[])
 {
     //open and closing two files practice till I know how to do it by heart
-    
+
     //check for 3 arguments
-    if (argc != 3)
+    if (argc != 2)
     {
-        printf("usage: rec SOURCE DESTINATION");
+        printf("Usage: ./recover image");
         return 1;
     }
-    
+
     //open source file
     FILE *fileSource;
     fileSource = fopen(argv[1], "r");
     if (!fileSource)
     {
         printf("Could not open source file.\n");
-        return 2;
+        return 0;
     }
 
     //open destination file
@@ -32,15 +31,17 @@ int main(int argc, char *argv[])
     //     return 3;
     // }
 
-    const int BLOCK_SIZE = 512; 
+    const int BLOCK_SIZE = 512;
     unsigned char buffer[BLOCK_SIZE];
     int image_counter = 0;
     FILE *output = NULL;
     while (fread(&buffer, BLOCK_SIZE, 1, fileSource))
     {
         //Find if block starts a new jpg
-        if(buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0){
-            if(image_counter != 0 && output != NULL){
+        if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
+        {
+            if (image_counter != 0 && output != NULL)
+            {
                 fclose(output);
             }
             char filename[8];
@@ -50,11 +51,12 @@ int main(int argc, char *argv[])
             // printf("Found 0xFF in front of 512 block. Number: %i\n", image_counter);
         }
         // fwrite(&buffer, sizeof(short), 1, fileDestination);
-        if(output != NULL){
+        if (output != NULL)
+        {
             fwrite(&buffer, BLOCK_SIZE, 1, output);
         }
     }
-    
+
     fclose(fileSource);
     // fclose(fileDestination);
     return 0;
