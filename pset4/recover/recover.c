@@ -3,9 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-    //open and closing two files practice till I know how to do it by heart
-
-    //check for 3 arguments
+    //check for 2 arguments
     if (argc != 2)
     {
         printf("Usage: ./recover image");
