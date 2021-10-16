@@ -48,7 +48,6 @@ int main(void) {
     n->number = 5;
     n->next = NULL;
     list->next->next= n;
-    
     for (node *temp = list; temp != NULL; temp = temp->next )
     {
         printf("%i\n", temp->number);
