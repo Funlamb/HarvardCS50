@@ -10,99 +10,51 @@ typedef struct node
 node;
 int search(node *tree, int number);
 void freeTree(node *tree);
-void addToTree(node *tree, int key);
+void addToTree(node *root, node *key);
+node initNode(int value);
 
 int main(void) {
     //add to tree
-    node *list = 0;
+    node *list = malloc(sizeof(node));
+    list->number = 10;
+    list->left = NULL;
+    list->right = NULL;
 
-    // node *n = malloc(sizeof(node));
-    // if(!n){
-    //     return 1;
-    // }
-    // n->number = 10;
-    // n->left = 0;
-    // n->right = 0;
-    int n = 10;
-    addToTree(list, n);
-    // list = n;
-
-    // n = malloc(sizeof(node));
-    // if(!n){
-    //     return 1;
-    // }
-    // n->number = 15;
-    // n->left = 0;
-    // n->right = 0;
-    n = 15;
+    node *n = malloc(sizeof(node));
+    n->number = 15;
+    n->left = NULL;
+    n->right = NULL;
     addToTree(list, n);
 
-    // n = malloc(sizeof(node));
-    // if (!n)
-    // {
-    //     return 1;
-    // }
-    // n->number = 5;
-    // n->left = 0;
-    // n->right = 0;
-    n = 5;
-    addToTree(list, n);
-
-    // n = malloc(sizeof(node));
-    // if (!n)
-    // {
-    //     return 1;
-    // }
-    // n->number = 7;
-    // n->left = 0;
-    // n->right = 0;
-    n = 7;
-    addToTree(list, n);
-
-    // n = malloc(sizeof(node));
-    // if (!n)
-    // {
-    //     return 1;
-    // }
-    // n->number = 9;
-    // n->left = 0;
-    // n->right = 0;
-    n = 9;
+    n = malloc(sizeof(node));
+    n->number = 5;
+    n->left = NULL;
+    n->right = NULL;
     addToTree(list, n);
     
-    // n = malloc(sizeof(node));
-    // if (!n)
-    // {
-    //     return 1;
-    // }
-    // n->number = 45;
-    // n->left = 0;
-    // n->right = 0;
-    n = 45;
+    n = malloc(sizeof(node));
+    n->number = 6;
+    n->left = NULL;
+    n->right = NULL;
     addToTree(list, n);
     
-    // n = malloc(sizeof(node));
-    // if (!n)
-    // {
-    //     return 1;
-    // }
-    // n->number = 35;
-    // n->left = 0;
-    // n->right = 0;
-    n = 35;
+    n = malloc(sizeof(node));
+    n->number = 3;
+    n->left = NULL;
+    n->right = NULL;
     addToTree(list, n);
-        
-    // n = malloc(sizeof(node));
-    // if (!n)
-    // {
-    //     return 1;
-    // }
-    // n->number = 12;
-    // n->left = 0;
-    // n->right = 0;
-    n = 12;
+    
+    n = malloc(sizeof(node));
+    n->number = 18;
+    n->left = NULL;
+    n->right = NULL;
     addToTree(list, n);
-
+    
+    n = malloc(sizeof(node));
+    n->number = 13;
+    n->left = NULL;
+    n->right = NULL;
+    addToTree(list, n);
     //search tree
     printf("%i\n", search(list, 11));
     printf("%i\n", search(list, 15));
@@ -112,35 +64,43 @@ int main(void) {
     freeTree(list);
     return 0;
 }
+node initNode(int value)
+{
+    node *temp = malloc(sizeof(node));
+    temp->number = value;
+    temp->left = NULL;
+    temp->right = NULL;
+    return *temp;
+}
 
-void addToTree(node *tree, int key){
-    // if (tree && n)
-    // {
-        // add to the tree
+void addToTree(node *root, node *key){
+    if (root && key)
+    {
+        //add to the tree
         //Start from the top
         printf("Add to tree\n");
-        if(tree == 0){
+        if(root == 0){
             printf("Zero\n");
-            tree = malloc(sizeof(node));
-            tree->number = key;
-            tree->left = 0;
-            tree->right = 0;
+            root = malloc(sizeof(node));
+            root = key;
+            root->left = 0;
+            root->right = 0;
         }
 
         //check if the number is smaller or bigger
         //if bigger add to the right
-        else if (tree->number < key)//If the tree's number is smaller than the number add the number to the right of the tree
+        else if (root->number < key->number)//If the tree's number is smaller than the number add the number to the right of the tree
         {
             printf("Right\n");
-            addToTree(tree->right, key);
+            addToTree(root->right, key);
         } 
         //if smaller add to the left
         else
         {
             printf("Left\n");
-            addToTree(tree->left, key);
+            addToTree(root->left, key);
         }
-    // }
+    }
 }
 
 int search(node *tree, int number){
