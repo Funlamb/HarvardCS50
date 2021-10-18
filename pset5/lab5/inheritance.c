@@ -27,6 +27,8 @@ int main(void)
     srand(time(0));
 
     // Create a new family with three generations
+
+    printf("Create person\n");
     person *p = create_family(GENERATIONS);
 
     // Print family tree of blood types
@@ -40,21 +42,30 @@ int main(void)
 person *create_family(int generations)
 {
     // TODO: Allocate memory for new person
-
+    person *p = malloc(sizeof(person));
+    // printf("Create person");
     // Generation with parent data
     if (generations > 1)
     {
         // TODO: Recursively create blood type histories for parents
-
+        p->parents[0] = create_family(generations - 1);
+        p->parents[1] = create_family(generations - 1);
         // TODO: Randomly assign child alleles based on parents
+        p->alleles[0] = p->parents[0]->alleles[0];
+        p->alleles[1] = p->parents[1]->alleles[0];
     }
 
     // Generation without parent data
-    else
+    // else
     {
+        printf("Here\n");
         // TODO: Set parent pointers to NULL
-
+        p->parents[0] = NULL;
+        p->parents[1] = NULL;
         // TODO: Randomly assign alleles
+        p->alleles[0] = random_allele();
+        p->alleles[1] = random_allele();
+        printf("Person Allele [0]: %c Allele [1]: %c\n", p->alleles[0], p->alleles[1]);
     }
 
     // TODO: Return newly created person
