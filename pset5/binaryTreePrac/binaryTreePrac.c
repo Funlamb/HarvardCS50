@@ -14,6 +14,8 @@ void addToTree(node *root, node *leaf);
 void printTree(node *root);
 int search(node *tree, int number);
 void freeTree(node *tree);
+void printNode(node *n);
+
 
 int main(void) {
     node *n1 = initNode(10);
@@ -26,8 +28,14 @@ int main(void) {
     addToTree(n1, n3);
     addToTree(n1, n2);
     addToTree(n1, n4);
+    printNode(n1);
+    printNode(n2);
+    printNode(n3);
+    printNode(n4);
+    printNode(n5);
 
-    printTree(n1);
+    search(n1, 14);
+    search(n1, 9);
 
     free(n1);
     free(n2);
@@ -35,6 +43,23 @@ int main(void) {
     free(n4);
     free(n5);
     return 0;
+}
+
+void printNode(node *n){
+    printf("Node: %i ", n->number);
+    if (n->left)
+    {
+        printf("Left: %i \t", n->left->number);
+    } else {
+        printf("Left: Empty \t");
+    }
+    if (n->right == NULL)
+    {
+        printf("Right: Empty \t");
+    } else {
+        printf("Right: %i \t", n->right->number);
+    }
+    printf("\n");
 }
 
 void printTree(node *root){
@@ -77,7 +102,7 @@ void addToTree(node *root, node *leaf){
             {
                 addToTree(root->right, leaf);
             }
-        } 
+        }
         //if leaf is smaller than the root and it to the left
         else
         {
@@ -93,23 +118,25 @@ void addToTree(node *root, node *leaf){
     }
 }
 
-int search(node *tree, int number){
-    printf("%i, %i\n" , number, tree->number);
-    if(!tree){
-        printf("Here");
+int search(node * tree, int number){
+    printf("Searching for: %i\n" , number);
+    if(tree == NULL){
+        printf("No Tree\n");
         return 0;
     } 
-    else if (number > tree->number)
-    {
-        return search(tree->right, number);
-    } else if (number < tree->number)
-    {
-        return search(tree->left, number);
-    } 
-    else
-    {
+    if(tree->number == number){
+        printf("found it\n");
         return 1;
     }
+    if (number > tree->number)
+    {
+        printf("going Right\n");
+        return search(tree->right, number);
+    } else 
+    {
+        printf("going left\n");
+        return search(tree->left, number);
+    } 
 }
 
 void freeTree(node *tree){
