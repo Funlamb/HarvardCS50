@@ -9,22 +9,23 @@ typedef struct node
 }
 node;
 
+node *initNode(int value);
+void addToTree(node *root, node *leaf);
+void printTree(node *root);
 int search(node *tree, int number);
 void freeTree(node *tree);
-void addToTree(node *root, node *key);
-node *initNode(int value);
-void printTree(node *root);
+
 int main(void) {
     node *n1 = initNode(10);
-    node *n2 = initNode(14);
-    node *n3 = initNode(7);
-    node *n4 = initNode(123);
-    node *n5 = initNode(4);
+    node *n2 = initNode(11);
+    node *n3 = initNode(12);
+    node *n4 = initNode(13);
+    node *n5 = initNode(14);
 
-    n1->left = n5;
-    n1->right = n4;
-    n5->right = n2;
-    n4->left = n3;
+    addToTree(n1, n5);
+    addToTree(n1, n3);
+    addToTree(n1, n2);
+    addToTree(n1, n4);
 
     printTree(n1);
 
@@ -40,18 +41,20 @@ void printTree(node *root){
     if (!root)
     {
         printf("Empty\n");
+        return;
     }
     printf("Value = %d\n", root->number );
     printf("Left: \n");
     printTree(root->left);
     printf("Right: \n");
     printTree(root->right);
+    printf("done\n");
 }
 
 node *initNode(int value)
 {
-    node *temp = malloc(sizeof(node));
-    if (!temp)
+    node* temp = malloc(sizeof(node));
+    if (temp)
     {
         temp->number = value;
         temp->left = NULL;
@@ -60,32 +63,32 @@ node *initNode(int value)
     return temp;
 }
 
-void addToTree(node *root, node *key){
-    if (root && key)
+void addToTree(node *root, node *leaf){
+    if (root && leaf)
     {
-        //add to the tree
-        //Start from the top
-        printf("Add to tree\n");
-        if(root == 0){
-            printf("Zero\n");
-            root = malloc(sizeof(node));
-            root = key;
-            root->left = 0;
-            root->right = 0;
-        }
-
-        //check if the number is smaller or bigger
-        //if bigger add to the right
-        else if (root->number < key->number)//If the tree's number is smaller than the number add the number to the right of the tree
+        //if leaf is larger than the root and it to the right
+        if (leaf->number > root->number)
         {
-            printf("Right\n");
-            addToTree(root->right, key);
+            //add leaf to the right if root->right is empty
+            if (root->right == NULL)
+            {
+                root->right = leaf;
+            }else
+            {
+                addToTree(root->right, leaf);
+            }
         } 
-        //if smaller add to the left
+        //if leaf is smaller than the root and it to the left
         else
         {
-            printf("Left\n");
-            addToTree(root->left, key);
+            if (root->left == NULL)
+            {
+                root->left = leaf;
+            }
+            else
+            {
+                addToTree(root->left, leaf);
+            }   
         }
     }
 }
