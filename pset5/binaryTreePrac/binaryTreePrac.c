@@ -8,69 +8,56 @@ typedef struct node
     struct node *right;    
 }
 node;
+
 int search(node *tree, int number);
 void freeTree(node *tree);
 void addToTree(node *root, node *key);
-node initNode(int value);
-
+node *initNode(int value);
+void printTree(node *root);
 int main(void) {
-    //add to tree
-    node *list = malloc(sizeof(node));
-    list->number = 10;
-    list->left = NULL;
-    list->right = NULL;
+    node *n1 = initNode(10);
+    node *n2 = initNode(14);
+    node *n3 = initNode(7);
+    node *n4 = initNode(123);
+    node *n5 = initNode(4);
 
-    node *n = malloc(sizeof(node));
-    n->number = 15;
-    n->left = NULL;
-    n->right = NULL;
-    addToTree(list, n);
+    n1->left = n5;
+    n1->right = n4;
+    n5->right = n2;
+    n4->left = n3;
 
-    n = malloc(sizeof(node));
-    n->number = 5;
-    n->left = NULL;
-    n->right = NULL;
-    addToTree(list, n);
-    
-    n = malloc(sizeof(node));
-    n->number = 6;
-    n->left = NULL;
-    n->right = NULL;
-    addToTree(list, n);
-    
-    n = malloc(sizeof(node));
-    n->number = 3;
-    n->left = NULL;
-    n->right = NULL;
-    addToTree(list, n);
-    
-    n = malloc(sizeof(node));
-    n->number = 18;
-    n->left = NULL;
-    n->right = NULL;
-    addToTree(list, n);
-    
-    n = malloc(sizeof(node));
-    n->number = 13;
-    n->left = NULL;
-    n->right = NULL;
-    addToTree(list, n);
-    //search tree
-    printf("%i\n", search(list, 11));
-    printf("%i\n", search(list, 15));
-    printf("%i\n", search(list, 5));
+    printTree(n1);
 
-    //Free the whole tree
-    freeTree(list);
+    free(n1);
+    free(n2);
+    free(n3);
+    free(n4);
+    free(n5);
     return 0;
 }
-node initNode(int value)
+
+void printTree(node *root){
+    if (!root)
+    {
+        printf("Empty\n");
+    }
+    printf("Value = %d\n", root->number );
+    printf("Left: \n");
+    printTree(root->left);
+    printf("Right: \n");
+    printTree(root->right);
+}
+
+node *initNode(int value)
 {
     node *temp = malloc(sizeof(node));
-    temp->number = value;
-    temp->left = NULL;
-    temp->right = NULL;
-    return *temp;
+    if (!temp)
+    {
+        temp->number = value;
+        temp->left = NULL;
+        temp->right = NULL;
+    }
+    return temp;
 }
 
 void addToTree(node *root, node *key){
