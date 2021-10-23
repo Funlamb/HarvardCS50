@@ -16,6 +16,7 @@ typedef struct node {
 const unsigned int N = 26;
 //hash table
 node *table[N];
+loadHashTable(node *table[], node *temp);
 
 int main(int argc, char *argv[]){
     
@@ -59,15 +60,10 @@ int main(int argc, char *argv[]){
             printf("Could not create node.\n");
             return 1;
         }
-        sprintf(temp->word, lowerBuffer);
-        // temp->word = lowerBuffer;
-        printf("Printing: %s", temp->word);
+        sprintf(temp->word, lowerBuffer);//load the word into the temp node
         //load each line to table
-        //get the bucket it is supposed to go in. 
-        //put it in that bucket
-        // table[correctBucket]->next =         
-        //if there is something there already link them together. 
-
+        loadHashTable(*table, temp);
+        // printf("%s", table[0]->next->word);
     }
 
     if (feof(dictionaryFile))
@@ -82,4 +78,16 @@ int main(int argc, char *argv[]){
 
     fclose(dictionaryFile);
     return 0;
+}
+loadHashTable(node *table[], node *temp){
+    //get the bucket it is supposed to go in.
+    printf("Temp Word: %s", temp->word);
+    const int REDUCE_TO_BUCKET = 97;
+    int correctBucket = temp->word[0] - REDUCE_TO_BUCKET;
+    //put it in that bucket
+    node *newTable[8];
+    newTable[0] = temp;//add to the bucket;
+    printf("Table Word: %s", newTable[0]->word);
+    printf("Temp Word: %s", temp->word);
+    //if there is something there already link them together. 
 }
