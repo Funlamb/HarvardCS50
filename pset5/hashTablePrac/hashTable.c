@@ -16,7 +16,7 @@ typedef struct node {
 const unsigned int N = 26;
 //hash table
 node *table[N];
-loadHashTable(node *table, node *temp);//My own function to create the hash table
+loadHashTable(node *temp);//My own function to create the hash table
 
 int main(int argc, char *argv[]){
     
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]){
         }
         sprintf(temp->word, lowerBuffer);//load the word into the temp node
         //load each line to table
-        loadHashTable(*table, temp);
+        loadHashTable(temp);
     }
 
     if (feof(dictionaryFile))
@@ -76,18 +76,15 @@ int main(int argc, char *argv[]){
     fclose(dictionaryFile);
     return 0;
 }
-loadHashTable(node *table, node *temp){
-    printf("Temp1 Word: %s", temp->word);//Test that the word is in the temp node
+loadHashTable(node *temp){
+    printf("Temp Word: %s", temp->word);//Test that the word is in the temp node
 
     //get the bucket it is supposed to go in.
     const int REDUCE_TO_BUCKET = 97;
     int correctBucket = temp->word[0] - REDUCE_TO_BUCKET;
     
     //put it in that bucket
-    table[0]->word = temp->word;//Why isn't this working? Aren't I passing it by refferance correctlly? 
-    printf("Table2 Word: %s", table[0]->word);//Error I don't understand: operator -> or ->* applied to "node" instead of to a pointer typeC/C++(3364)
-    node *newTable[8];//A new Table I made to test how this works. 
-    newTable[0] = temp;//add to the bucket;
-    printf("Table Word: %s", newTable[0]->word);// This works
+    table[0] = temp;//Why isn't this working? Aren't I passing it by refferance correctlly? 
+    printf("Table Word: %s", table[0]->word);//Error I don't understand: operator -> or ->* applied to "node" instead of to a pointer typeC/C++(3364)
     //TODO: Link the table when there is a collision in the hash table
 }
