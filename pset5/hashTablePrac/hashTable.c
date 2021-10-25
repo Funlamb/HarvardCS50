@@ -12,11 +12,11 @@ typedef struct node {
     struct node *next;
 } node;
 
-//Number of buckets for the hast table
+//Number of buckets for the hast table. 26 letters in the alphabit
 const unsigned int N = 26;
 //hash table
 node *table[N];
-loadHashTable(node *table[], node *temp);
+loadHashTable(node *table, node *temp);//My own function to create the hash table
 
 int main(int argc, char *argv[]){
     
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
     char buffer[MAX_LENGTH];
     while (fgets(buffer, MAX_LENGTH, dictionaryFile))
     {
-        //change the word to lower case
+        //change the word to lower case. Could I be doing this better?
         char lowerBuffer[MAX_LENGTH];
         for (int i = 0; i < MAX_LENGTH; i++)
         {
@@ -51,8 +51,7 @@ int main(int argc, char *argv[]){
        
         const int REDUCE_TO_BUCKET = 97;
         int correctBucket = lowerBuffer[0] - REDUCE_TO_BUCKET;
-        // printf("%i:\t", lowerBuffer[0] - REDUCE_TO_BUCKET);
-        // printf("%s", lowerBuffer);
+
         //create a node from line
         node *temp= malloc(sizeof(node));
         if (!temp)
@@ -63,31 +62,32 @@ int main(int argc, char *argv[]){
         sprintf(temp->word, lowerBuffer);//load the word into the temp node
         //load each line to table
         loadHashTable(*table, temp);
-        // printf("%s", table[0]->next->word);
     }
 
     if (feof(dictionaryFile))
     {
         printf("\nEnd of File\n");
     }
+
+    //TODO Unload the hashtable
     
-    
-    //TODO Unload a hashtable
-    
-    //TODO Print a hashtable
+    //TODO Print the hashtable
 
     fclose(dictionaryFile);
     return 0;
 }
-loadHashTable(node *table[], node *temp){
+loadHashTable(node *table, node *temp){
+    printf("Temp1 Word: %s", temp->word);//Test that the word is in the temp node
+
     //get the bucket it is supposed to go in.
-    printf("Temp Word: %s", temp->word);
     const int REDUCE_TO_BUCKET = 97;
     int correctBucket = temp->word[0] - REDUCE_TO_BUCKET;
+    
     //put it in that bucket
-    node *newTable[8];
+    table[0]->word = temp->word;//Why isn't this working? Aren't I passing it by refferance correctlly? 
+    printf("Table2 Word: %s", table[0]->word);//Error I don't understand: operator -> or ->* applied to "node" instead of to a pointer typeC/C++(3364)
+    node *newTable[8];//A new Table I made to test how this works. 
     newTable[0] = temp;//add to the bucket;
-    printf("Table Word: %s", newTable[0]->word);
-    printf("Temp Word: %s", temp->word);
-    //if there is something there already link them together. 
+    printf("Table Word: %s", newTable[0]->word);// This works
+    //TODO: Link the table when there is a collision in the hash table
 }
