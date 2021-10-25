@@ -62,6 +62,7 @@ int main(int argc, char *argv[]){
         sprintf(temp->word, lowerBuffer);//load the word into the temp node
         //load each line to table
         loadHashTable(temp);
+        free(temp);
     }
 
     if (feof(dictionaryFile))
@@ -69,13 +70,14 @@ int main(int argc, char *argv[]){
         printf("\nEnd of File\n");
     }
 
-    //TODO Unload the hashtable
-    
     //TODO Print the hashtable
+    
+    //TODO Unload the hashtable
 
     fclose(dictionaryFile);
     return 0;
 }
+
 loadHashTable(node *temp){
     printf("Temp Word: %s", temp->word);//Test that the word is in the temp node
 
@@ -84,7 +86,9 @@ loadHashTable(node *temp){
     int correctBucket = temp->word[0] - REDUCE_TO_BUCKET;
     
     //put it in that bucket
-    table[0] = temp;//Why isn't this working? Aren't I passing it by refferance correctlly? 
-    printf("Table Word: %s", table[0]->word);//Error I don't understand: operator -> or ->* applied to "node" instead of to a pointer typeC/C++(3364)
+    node *n = malloc(sizeof(node));
+    n.next = table[correctBucket]->next;
+    table[correctBucket] = temp;
+
     //TODO: Link the table when there is a collision in the hash table
 }
