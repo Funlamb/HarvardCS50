@@ -60,6 +60,7 @@ int main(int argc, char *argv[]){
             return 1;
         }
         sprintf(temp->word, lowerBuffer);//load the word into the temp node
+        temp->next = NULL;
         //load each line to table
         loadHashTable(temp);
         free(temp);
@@ -71,7 +72,7 @@ int main(int argc, char *argv[]){
     }
 
     //TODO Print the hashtable
-    
+    printHashTable(table[0]);
     //TODO Unload the hashtable
 
     fclose(dictionaryFile);
@@ -86,9 +87,21 @@ loadHashTable(node *temp){
     int correctBucket = temp->word[0] - REDUCE_TO_BUCKET;
     
     //put it in that bucket
-    node *n = malloc(sizeof(node));
-    n.next = table[correctBucket]->next;
+    if (table[correctBucket]->next == NULL)
+    {
+        /* code */
+    }
+    
+    temp->next = table[correctBucket]->next;
     table[correctBucket] = temp;
 
     //TODO: Link the table when there is a collision in the hash table
+}
+
+printHashTable(node *toPrint){
+    if (toPrint->word)
+        {
+            printf("%s\n", toPrint->word);
+            printHashTable(toPrint->next);
+        }    
 }
