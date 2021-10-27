@@ -16,9 +16,15 @@ typedef struct node {
 const unsigned int N = 26;
 //hash table
 node *table[N];
-loadHashTable(node *temp);//My own function to create the hash table
+// loadHashTable(node *temp);//My own function to create the hash table
+loadHashTable(node **n, char c[]);
 
 int main(int argc, char *argv[]){
+    //set everything to null in the table.
+    for (int i = 0; i < N; i++)
+    {
+        table[N] = NULL;
+    }
     
     //check for correct usage
     if (argc != 2)
@@ -48,22 +54,11 @@ int main(int argc, char *argv[]){
             ch = buffer[i];
             lowerBuffer[i] = (char) tolower(ch);
         }
-       
+    
+        //load each line to table in correct bucket
         const int REDUCE_TO_BUCKET = 97;
         int correctBucket = lowerBuffer[0] - REDUCE_TO_BUCKET;
-
-        //create a node from line
-        node *temp= malloc(sizeof(node));
-        if (!temp)
-        {
-            printf("Could not create node.\n");
-            return 1;
-        }
-        sprintf(temp->word, lowerBuffer);//load the word into the temp node
-        temp->next = NULL;
-        //load each line to table
-        loadHashTable(temp);
-        free(temp);
+        loadHashTable(&table[correctBucket], lowerBuffer);
     }
 
     if (feof(dictionaryFile))
@@ -72,33 +67,38 @@ int main(int argc, char *argv[]){
     }
 
     //TODO Print the hashtable
-    printHashTable(table[0]);
+    // printHashTable(table[0]);
+    printf("%s", *table[0]->word);
     //TODO Unload the hashtable
 
     fclose(dictionaryFile);
     return 0;
 }
 
-loadHashTable(node *temp){
-    printf("Temp Word: %s", temp->word);//Test that the word is in the temp node
-
-    //get the bucket it is supposed to go in.
-    const int REDUCE_TO_BUCKET = 97;
-    int correctBucket = temp->word[0] - REDUCE_TO_BUCKET;
-    
-    //put it in that bucket
-    if (table[correctBucket]->next == NULL)
+loadHashTable(node **n, char c[]){
+    if (n == NULL)
     {
-        /* code */
-    }
-    
-    temp->next = table[correctBucket]->next;
-    table[correctBucket] = temp;
-
-    //TODO: Link the table when there is a collision in the hash table
+        //create temp node
+        node *temp= malloc(sizeof(node));
+        if (!temp)
+        {
+            printf("Could not create node.\n");
+            return 1;
+        }
+        sprintf(temp->word, c);//load the word into the temp node
+        temp->next = NULL;
+        *n = temp;//Why is n not being set here? 
+        printf("New Node Word: %s", n->word);
+   }
+   else // we never get here. Why?
+   {
+        printf("Link Node: %s", n->word);
+        loadHashTable(n->next, c);
+   }
 }
 
 printHashTable(node *toPrint){
+    //TODO: Print the hash table
     if (toPrint->word)
         {
             printf("%s\n", toPrint->word);
