@@ -12,18 +12,19 @@ typedef struct node {
     struct node *next;
 } node;
 
-//Number of buckets for the hast table. 26 letters in the alphabit
-const unsigned int N = 26;
-//hash table
-node *table[N];
-// loadHashTable(node *temp);//My own function to create the hash table
-loadHashTable(node **n, char c[]);
+void loadHashTable(node **n, char c[]);
+void printHashTable(node *toPrint);
 
 int main(int argc, char *argv[]){
+    //Number of buckets for the hast table. 26 letters in the alphabit
+    const unsigned int N = 26;
+    //hash table
+    node *table[N];
+
     //set everything to null in the table.
     for (int i = 0; i < N; i++)
     {
-        table[N] = NULL;
+        table[i] = NULL;
     }
     
     //check for correct usage
@@ -33,7 +34,6 @@ int main(int argc, char *argv[]){
         return 1;
     }
     
-    //TODO Load a hashtable
     //open a file
     char *fileName = argv[1];
     FILE *dictionaryFile = fopen(fileName, "r");
@@ -48,7 +48,8 @@ int main(int argc, char *argv[]){
     {
         //change the word to lower case. Could I be doing this better?
         char lowerBuffer[MAX_LENGTH];
-        for (int i = 0; i < MAX_LENGTH; i++)
+        int wordLen = strlen(buffer);
+        for (int i = 0; i < wordLen; i++)
         {
             char ch;
             ch = buffer[i];
@@ -67,39 +68,38 @@ int main(int argc, char *argv[]){
     }
 
     //TODO Print the hashtable
-    // printHashTable(table[0]);
-    printf("%s", *table[0]->word);
+    //printHashTable(table[0]);
+    printf("%s", table[0]->word);
     //TODO Unload the hashtable
 
     fclose(dictionaryFile);
     return 0;
 }
 
-loadHashTable(node **n, char c[]){
-    if (n == NULL)
+void loadHashTable(node **n, char c[]){
+    if (*n == NULL)
     {
         //create temp node
         node *temp= malloc(sizeof(node));
         if (!temp)
         {
             printf("Could not create node.\n");
-            return 1;
         }
-        sprintf(temp->word, c);//load the word into the temp node
+        sprintf(temp->word, "%s",  c);//load the word into the temp node
         temp->next = NULL;
         *n = temp;//Why is n not being set here? 
-        printf("New Node Word: %s", n->word);
+        printf("New Node Word: %s", (*n)->word);
    }
    else // we never get here. Why?
    {
-        printf("Link Node: %s", n->word);
-        loadHashTable(n->next, c);
+        printf("Link Node: %s", (*n)->word);
+        loadHashTable(&((*n)->next), c);
    }
 }
 
-printHashTable(node *toPrint){
+void printHashTable(node *toPrint){
     //TODO: Print the hash table
-    if (toPrint->word)
+    if (toPrint->word != NULL)
         {
             printf("%s\n", toPrint->word);
             printHashTable(toPrint->next);
