@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 void swap(int a, int b);
-void swapPointers(int *a, int *b);
+void swapWithPointers(int *a, int *b);
 
 int main(int argc, char *argv[]){
     if (argc != 3)
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
     printf("Before   A: %d B: %D\n", a, b);
     // swap(a, b);
     // printf("After A: %d B: %d\n", a, b);
-    swapPointers(&a, &b);
+    swapWithPointers(&a, &b);
     printf("Pointers A: %d B: %d\n", a, b);
     printf("Pointer to a: %x\n", &a);
     printf("Pointer to b: %x\n", &b);
@@ -37,8 +37,8 @@ void swap(int a, int b){
     printf("b: %i\n", b);
 }
 
-void swapPointers(int *a, int *b){
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+void swapWithPointers(int *a, int *b){
+    int temp = *a;//value in temp is a
+    *a = *b;//value in a is now b
+    *b = temp;//value in b is now temp
 }

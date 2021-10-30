@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+// #include <string>
+#include <string.h>
 #include <ctype.h>
 
 int const LENGTH = 45;
@@ -40,11 +42,13 @@ int main(int argc, char *argv[]){
     if (!dictionaryFile)
     {
         printf("Can not open file: %s\n", argv[1]);
+        return 1;
     }
+
     //read each line
     const unsigned MAX_LENGTH = 256;
-    char buffer[MAX_LENGTH];
-    while (fgets(buffer, MAX_LENGTH, dictionaryFile))
+    char buffer[MAX_LENGTH + 1];
+    while (fscanf(dictionaryFile, "%s", buffer) != EOF)
     {
         //change the word to lower case. Could I be doing this better?
         char lowerBuffer[MAX_LENGTH];
@@ -60,6 +64,11 @@ int main(int argc, char *argv[]){
         const int REDUCE_TO_BUCKET = 97;
         int correctBucket = lowerBuffer[0] - REDUCE_TO_BUCKET;
         loadHashTable(&table[correctBucket], lowerBuffer);
+        for (int i = 0; i < wordLen; i++)
+        {
+            lowerBuffer[i] = NULL;
+        }
+        
     }
 
     if (feof(dictionaryFile))
@@ -68,8 +77,13 @@ int main(int argc, char *argv[]){
     }
 
     //TODO Print the hashtable
+    for (int i = 0; i < N; i++)
+    {
+        printHashTable(table[i]);
+    }
+    
     //printHashTable(table[0]);
-    printf("%s", table[0]->word);
+    printf("Word [0]: %s\n", table[0]->next->next->next->next->word);//It finally works
     //TODO Unload the hashtable
 
     fclose(dictionaryFile);
@@ -85,21 +99,23 @@ void loadHashTable(node **n, char c[]){
         {
             printf("Could not create node.\n");
         }
-        sprintf(temp->word, "%s",  c);//load the word into the temp node
+        strcpy(temp->word, c);
+        // printf("%s", (*n)->word);
+        // sprintf(temp->word, "%s",  c);//load the word into the temp node
         temp->next = NULL;
-        *n = temp;//Why is n not being set here? 
-        printf("New Node Word: %s", (*n)->word);
+        *n = temp;
+        printf("New Node Word: %s\n", (*n)->word);
    }
    else // we never get here. Why?
    {
-        printf("Link Node: %s", (*n)->word);
+        printf("Link Node: %s\n", (*n)->word);
         loadHashTable(&((*n)->next), c);
    }
 }
 
 void printHashTable(node *toPrint){
     //TODO: Print the hash table
-    if (toPrint->word != NULL)
+    if (toPrint)
         {
             printf("%s\n", toPrint->word);
             printHashTable(toPrint->next);
