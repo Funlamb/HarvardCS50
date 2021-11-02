@@ -1,5 +1,6 @@
 //Practice for my hash table
 //I don't really inderstand what is going on in the cs50 version because there is just so much to look at so I am making my own.
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +15,9 @@ typedef struct node {
     struct node *next;
 } node;
 
-void loadHashTable(node **n, char c[]);
+bool loadHashTable(node **n, char c[]);
+bool testWord(char *c, node **table);
+bool testWordRec(node **test, char *c);
 void printHashTable(node *toPrint);
 
 int main(int argc, char *argv[]){
@@ -68,29 +71,72 @@ int main(int argc, char *argv[]){
         {
             lowerBuffer[i] = NULL;
         }
-        
     }
 
     if (feof(dictionaryFile))
     {
         printf("\nEnd of File\n");
     }
+    fclose(dictionaryFile);
 
     //TODO Print the hashtable
-    for (int i = 0; i < N; i++)
-    {
-        printHashTable(table[i]);
-    }
-    
-    //printHashTable(table[0]);
-    printf("Word [0]: %s\n", table[0]->next->next->next->next->word);//It finally works
-    //TODO Unload the hashtable
+    // for (int i = 0; i < N; i++)
+    // {
+    //     printHashTable(table[i]);
+    // }
 
-    fclose(dictionaryFile);
+    //TODO Test word
+    // testWord("Alloy", table);
+    // printf("%i\n", testWord("Gwar", table));
+    printf("Did we find the word? %i\n", testWord("Alloy4567", table));
+    printf("Did we find the word? %i\n", testWord("angry", table));
+    printf("Did we find the word? %i\n", testWord("dic", table));
+    //TODO Unload the hashtable
+    char key[] = "help";
+    char word[] = "help";
+    printf("%i\n", strcmp(key,word)==0);
+
     return 0;
 }
 
-void loadHashTable(node **n, char c[]){
+bool testWord(char *c, node **table){
+    //find length of word to test
+    int testWordLen = strlen(c);
+    printf("Str Len: %i\n", testWordLen);
+    
+    //convert to lower case
+    char s[testWordLen];
+    for (int i = 0; i < testWordLen; i++)
+    {
+        s[i] =  tolower((unsigned char) c[i]);
+    }
+    
+    //find which bucket to check
+    int bucketToCheck = s[0] - 'a';
+    // printf("Str Bucket: %i\n\n", bucketToCheck);
+    //check each word till word found
+    
+    return testWordRec(&table[bucketToCheck], s);
+}
+
+bool testWordRec(node **test, char *c){
+    //test each letter
+    printf("Table: %s \tTest: %s\n", (*test)->word, c);
+    if (!(*test)->word)
+    {
+        return false;
+    }
+    int len = 0;
+    len = strlen(c) - 2;
+    int lenToTrue = 0;
+    // printf("Len Word to check: %i, Len of word: %i\n", len, strlen((*test)->word));
+    if(strcmp(c, (*test)->word) == 0){
+        return true;
+    }
+    testWordRec(&(*test)->next, c);
+}
+
+bool loadHashTable(node **n, char c[]){
     if (*n == NULL)
     {
         //create temp node
@@ -98,19 +144,19 @@ void loadHashTable(node **n, char c[]){
         if (!temp)
         {
             printf("Could not create node.\n");
+            return false;
         }
         strcpy(temp->word, c);
-        // printf("%s", (*n)->word);
-        // sprintf(temp->word, "%s",  c);//load the word into the temp node
         temp->next = NULL;
         *n = temp;
-        printf("New Node Word: %s\n", (*n)->word);
+        // printf("New Node Word: %s\n", (*n)->word);
    }
    else // we never get here. Why?
    {
-        printf("Link Node: %s\n", (*n)->word);
+        // printf("Link Node: %s\n", (*n)->word);
         loadHashTable(&((*n)->next), c);
    }
+   return true;
 }
 
 void printHashTable(node *toPrint){
