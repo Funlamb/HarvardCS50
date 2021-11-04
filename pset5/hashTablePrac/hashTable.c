@@ -18,6 +18,7 @@ typedef struct node {
 bool loadHashTable(node **n, char c[]);
 bool testWord(char *c, node **table);
 bool testWordRec(node **test, char *c);
+int findBucket(char c);
 void printHashTable(node *toPrint);
 
 int main(int argc, char *argv[]){
@@ -88,7 +89,8 @@ int main(int argc, char *argv[]){
     //TODO Test word
     // testWord("Alloy", table);
     // printf("%i\n", testWord("Gwar", table));
-    printf("Did we find the word? %i\n", testWord("Alloy4567", table));
+    char *word = "Alloy";
+    printf("Did we find the word? %i\n", testWord(word, table[findBucket(word[0])]));
     printf("Did we find the word? %i\n", testWord("angry", table));
     printf("Did we find the word? %i\n", testWord("dic", table));
     //TODO Unload the hashtable
@@ -98,25 +100,9 @@ int main(int argc, char *argv[]){
 
     return 0;
 }
-
-bool testWord(char *c, node **table){
-    //find length of word to test
-    int testWordLen = strlen(c);
-    printf("Str Len: %i\n", testWordLen);
-    
-    //convert to lower case
-    char s[testWordLen];
-    for (int i = 0; i < testWordLen; i++)
-    {
-        s[i] =  tolower((unsigned char) c[i]);
-    }
-    
-    //find which bucket to check
-    int bucketToCheck = s[0] - 'a';
-    // printf("Str Bucket: %i\n\n", bucketToCheck);
-    //check each word till word found
-    
-    return testWordRec(&table[bucketToCheck], s);
+int findBucket(char c){
+    int bucketToCheck = c - 'a';
+    return bucketToCheck;
 }
 
 bool testWordRec(node **test, char *c){
