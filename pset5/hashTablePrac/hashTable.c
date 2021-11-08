@@ -85,7 +85,7 @@ int main(int argc, char *argv[]){
     printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word[0])],word));
     char *word2 = "aunt";
     printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word2[0])],word2));
-    char * word3 = "dick";
+    char * word3 = "Duck";
     printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word3[0])],word3));
     char * word4 = "caps";
     printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word4[0])],word4));
