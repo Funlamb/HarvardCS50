@@ -5,6 +5,8 @@ Angry
 Ally
 Best
 Cat
+CAPS
+carry
 dick
 energy
 test
@@ -12,7 +14,6 @@ words
 to
 load
 Hello
-CAPS
 ZILLOW
 not
 man

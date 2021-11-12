@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
         //change the word to lower case. Could I be doing this better? Is this part wrong? 
         char lowerBuffer[MAX_LENGTH];
         int wordLen = strlen(buffer);
-        for (int i = 0; i < wordLen; i++)
+        for (int i = 0; i < wordLen; i++)//turn string lower case TODO change to test words at lower case 
         {
             char ch;
             ch = buffer[i];
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
         }
     
         //load each line to table in correct bucket
-        const int REDUCE_TO_BUCKET = 97;
+        const int REDUCE_TO_BUCKET = 'a';
         int correctBucket = lowerBuffer[0] - REDUCE_TO_BUCKET;
         loadHashTable(&table[correctBucket], lowerBuffer);
         memset(lowerBuffer, 0, MAX_LENGTH);
@@ -72,6 +72,10 @@ int main(int argc, char *argv[]){
         // {
         //     lowerBuffer[i] = NULL;
         // }
+    }
+    for(int i = 0; i < 26; i++){
+
+        printHashTable(table[i]);
     }
 
     if (feof(dictionaryFile))
@@ -81,16 +85,18 @@ int main(int argc, char *argv[]){
     fclose(dictionaryFile);
 
     //Test word
-    char *word = "alloy";
-    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word[0])],word));
-    char *word2 = "aunt";
-    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word2[0])],word2));
-    char * word3 = "Duck";
-    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word3[0])],word3));
     char * word4 = "caps";
-    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word4[0])],word4));
+    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word4[0])],word4));//false
+    char *word = "alloy";
+    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word[0])],word));//true
+    char *word2 = "aunt";
+    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word2[0])],word2));//false
+    char * word3 = "Duck";
+    printf("Did we find the word? %i\n\n", testWord(&table[findBucket(word3[0])],word3));//false
+    char *word5 = "caps";
+    // int ptable = (*table[0])
+    printf("Did we find the word? %s\n\n", testWord(&table[findBucket(word5[0])], word5) ? "true" : "false");
     //TODO Unload the hashtable
-
     return 0;
 }
 
@@ -100,23 +106,33 @@ int findBucket(char c){
     return bucketToCheck;
 }
 
+//find out how to use **
 bool testWord(node **test, char *c){
+    bool myTest = false;
     if (!(*test))
     {
-        return false;
+        printf("Are we false.\n");
+        return myTest;
+        // return false;
     }
 
     int len = strlen((*test)->word);
     printf("Table: %s \tTest: %s\n", (*test)->word, c);
-    printf("Is this the word? %i\n", strncmp(c, (*test)->word, len) == 0);
-    if(strlen(c) == len && strncmp(c, (*test)->word, len) == 0){
-        return true;
+    // printf("Is this the word? %i\n", strncmp(c, (*test)->word, len) == 0);
+    if(strncmp(c, (*test)->word, len) == 0){
+    // if(strncmp(c, "caps", len) == 0){
+        printf("About to return true.\n");
+        myTest = true;
+        return myTest;
+        printf("Out.\n");
     }
+    printf("Testing next node.\n");
     testWord(&(*test)->next, c);
     return false;
 }
 
-bool loadHashTable(node **n, char c[]){
+bool loadHashTable(node **n, char c[]){ //&table[a], alloy
+//alloy -> any -> null
     if (*n == NULL)
     {
         //create temp node
@@ -130,7 +146,7 @@ bool loadHashTable(node **n, char c[]){
         temp->next = NULL;
         *n = temp;
    }
-   else // we never get here. Why?
+   else
    {
         loadHashTable(&((*n)->next), c);
    }
