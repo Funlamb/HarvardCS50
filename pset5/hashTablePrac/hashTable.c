@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
     char buffer[MAX_LENGTH + 1];
     while (fscanf(dictionaryFile, "%s", buffer) != EOF)
     {
-        //change the word to lower case. Could I be doing this better?
+        //change the word to lower case. Could I be doing this better? Is this part wrong? 
         char lowerBuffer[MAX_LENGTH];
         int wordLen = strlen(buffer);
         for (int i = 0; i < wordLen; i++)
