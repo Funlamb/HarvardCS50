@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "dictionary.h"
 #include <string.h>
-#include <strings.h>
+// #include <strings.h>
 #include <ctype.h>
 
 // Represents a node in a hash table
@@ -17,7 +17,7 @@ typedef struct node
 node;
 
 // Number of buckets in hash table
-const unsigned int N = 26;
+static const unsigned int N = 26;
 
 // Hash table
 node *table[N];
