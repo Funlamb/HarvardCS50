@@ -1,3 +1,5 @@
+from cs50 import get_int
+
 """Create mario pyramids"""
 
 while True:
