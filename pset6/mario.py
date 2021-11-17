@@ -1,6 +1,9 @@
 """Create mario pyramids"""
 
-height = int (input("Height: "))
+while True:
+    height = int (get_int("Height: "))
+    if height <= 8 and height > 0:
+        break
 
 space = height - 1
 brick = 1
