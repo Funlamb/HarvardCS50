@@ -33,6 +33,6 @@ if change >= 5:
 if change > 0:
     pennies = int(change / 1)
     change = change - (pennies * 1)
-    coins_due += penn
+    coins_due += pennies
 
 print(coins_due)
