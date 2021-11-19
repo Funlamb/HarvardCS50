@@ -1,0 +1,1 @@
+#don't need to change str to int you can just change it when you need to check it. 
