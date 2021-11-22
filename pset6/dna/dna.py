@@ -27,7 +27,9 @@ def main():
     for sus in suspects:
         print(sus)
         for item in sus:
-            print(sus[item])
+            if item != "name":
+                sus[item] = int(sus[item])
+            # print(sus[item])
             # for key, value in item:
             #     print(key)
             #     print(value)
