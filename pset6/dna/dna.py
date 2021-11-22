@@ -1,6 +1,9 @@
+
+
 import csv
 import sys
 
+# don't need to change str to int you can just change it when you need to check it. 
 # data.csv
 
 # name,AGATC,AATG,TATC
@@ -15,6 +18,10 @@ def main():
     # Ensure correct usage
     if len(sys.argv) != 3:
         print("Usage: python dna.py data.csv sequence.txt")
+    
+    # get Short strands we are look to find
+    # find matches in sequence
+    # compare to suspects
     
     suspects = []
     with open(sys.argv[1]) as file:
