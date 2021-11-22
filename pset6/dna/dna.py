@@ -19,6 +19,10 @@ def main():
     if len(sys.argv) != 3:
         print("Usage: python dna.py data.csv sequence.txt")
     
+    # get Short strands we are look to find
+    # find matches in sequence
+    # compare to suspects
+    
     suspects = []
     with open(sys.argv[1]) as file:
         reader = csv.DictReader(file)
