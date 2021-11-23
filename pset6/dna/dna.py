@@ -17,28 +17,47 @@ def main():
     if len(sys.argv) != 3:
         print("Usage: python dna.py data.csv sequence.txt")
     
-    # get Short strands we are look to find
-    # find matches in sequence
-    # compare to suspects
-    
     suspects = []
     with open(sys.argv[1]) as file:
         reader = csv.DictReader(file)
-        # top = reader.fieldnames
-        # print(top)
+        top = reader.fieldnames
         for row in reader:
             suspects.append(row)
 
+    # read the sequence.txt
+    sequence = ''
+    with open(sys.argv[2]) as file:
+        for line in file:
+            sequence = line
+    print(sequence)
+
+    # get Short strands we are look to find
+    top.pop(0)
+    print(top)
+    dict_of_tests = dict.fromkeys(top, 0)
+    # find matches in sequence
+    for seq in top:
+        # get length of seq we are checking
+        length = len(seq)
+        i = 0
+        j = length
+        chunks = [sequence[i:i+j] for i in range(0, len(sequence))]
+        for item in chunks:
+            if item == seq:
+                # add to a dict of what was found
+                dict_of_tests[seq] += 1
+    print(dict_of_tests)
+
+    # compare to suspects
     for sus in suspects:
-        print(sus)
+        name = sus.pop("name")
         for item in sus:
-            if item != "name":
-                sus[item] = int(sus[item])
-            # print(sus[item])
-            # for key, value in item:
-            #     print(key)
-            #     print(value)
-    print(suspects)
+            sus[item] = int(sus[item])
+        print(sus)
+        if sus == dict_of_tests:
+            print(name)
+
+
 
 if __name__ == "__main__":
     main()
