@@ -20,7 +20,7 @@ def main():
     suspects = []
     with open(sys.argv[1]) as file:
         reader = csv.DictReader(file)
-        srt = reader.fieldnames
+        SRTs = reader.fieldnames
         for row in reader:
             suspects.append(row)
 
@@ -31,19 +31,28 @@ def main():
             sequence = line
 
     # get Short strands we are look to find
-    srt.pop(0)
+    SRTs.pop(0)
+    dict_of_tests = dict.fromkeys(SRTs, 0)
     
-    dict_of_tests = dict.fromkeys(srt, 0)
-    for seq in srt:
+    for SRT in SRTs:
         # get length of seq we are checking
-        length = len(seq)
+        SRT_length = len(SRT)
+        # find first match
         i = 0
-        j = length
-        chunks = [sequence[i:i+j] for i in range(0, len(sequence))]
-        for item in chunks:
-            if item == seq:
-                # add to a dict of what was found
-                dict_of_tests[seq] += 1
+        max_SRT_count = 0
+        curr_SRT_count = 0
+        while i < len(sequence):
+            # if matched go to next set
+            if SRT == sequence[i:i+SRT_length]:
+                i += SRT_length
+                curr_SRT_count += 1
+                if curr_SRT_count > max_SRT_count:
+                    max_SRT_count = curr_SRT_count
+            # else continue to next letter
+            else:
+                curr_SRT_count = 0
+                i += 1
+        dict_of_tests[SRT] = max_SRT_count
     print(guilty_sus(suspects, dict_of_tests))
 
 # Must find the longest length of STRs. Not total number of matches. 
@@ -57,8 +66,8 @@ def guilty_sus(suspects, dict_of_srt):
             sus[item] = int(sus[item])
         if sus == dict_of_srt:
             name = name_of_sus
-    print(suspects)
-    print(dict_of_srt)
+    # print(suspects)
+    # print(dict_of_srt)
     return name
 
 if __name__ == "__main__":
