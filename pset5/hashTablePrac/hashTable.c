@@ -11,7 +11,7 @@
 int const LENGTH = 45;
 
 typedef struct node {
-    char word[LENGTH + 1];
+    char word[46];
     struct node *next;
 } node;
 
@@ -108,11 +108,11 @@ int findBucket(char c){
 
 //find out how to use **
 bool testWord(node **test, char *c){
-    bool myTest = false;
+    // bool myTest = false;
     if (!(*test))
     {
         printf("Are we false.\n");
-        return myTest;
+        return false;
         // return false;
     }
 
@@ -122,13 +122,12 @@ bool testWord(node **test, char *c){
     if(strncmp(c, (*test)->word, len) == 0){
     // if(strncmp(c, "caps", len) == 0){
         printf("About to return true.\n");
-        myTest = true;
-        return myTest;
-        printf("Out.\n");
+        // myTest = true;
+        return true;
+        //printf("Out.\n");
     }
     printf("Testing next node.\n");
-    testWord(&(*test)->next, c);
-    return false;
+    return testWord(&(*test)->next, c);
 }
 
 bool loadHashTable(node **n, char c[]){ //&table[a], alloy
