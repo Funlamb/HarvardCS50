@@ -1,1 +1,2 @@
-SELECT name FROM songs WHERE name Like "%feat.%";
+SELECT name FROM songs 
+    WHERE name Like "%feat.%";
