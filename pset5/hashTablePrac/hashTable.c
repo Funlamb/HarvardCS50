@@ -127,7 +127,7 @@ bool testWord(node **test, char *c){
         //printf("Out.\n");
     }
     printf("Testing next node.\n");
-    return testWord(&(*test)->next, c);
+    return testWord(&(*test)->next, c);// Reif is the man!!!
 }
 
 bool loadHashTable(node **n, char c[]){ //&table[a], alloy
