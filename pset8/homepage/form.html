@@ -9,7 +9,7 @@
         <title>My Webpage</title>
     </head>
     <header>
-        <ul>
+        <ul id="header">
             <li><a href="index.html">Story</a></li>
             <li><a href="hero.html">Hero</a></li>
             <li><a href="villain.html">Villain</a></li>
@@ -18,7 +18,19 @@
     </header>
     <div class="spacer">&nbsp;</div>
     <body>
-        hello, form
+        <p>If you would like more information on our story please provide your information below.</p>
+        <ul style="align: center;" >
+            <li style="float: none;" ><input type="text" id="fname" placeholder="First Name"></li>
+            <br>
+            <li style="float: none;" ><input type="text" id="lname" placeholder="Last Name"></li>
+            <br>
+            <li style="float: none;" ><input type="text" id="email" placeholder="Email Address"></li>
+            <br>
+            <li style="float: none;" ><label for="Bdate">Birth Day:</label></li>
+            <br>
+            <input type="date" id="Bdate">
+        </ul>
+        <button id="submit">Submit</button>
     </body>
     <footer>Made with the help from Harvard cs50</footer>
 </html>

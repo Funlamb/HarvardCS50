@@ -3,24 +3,13 @@
     --roseMadder: #E71D36;
     --orangePeel: #FF9F1C;
     --headerHeight: 50px;
+    --margin: 10px;
+    text-align: center;
 }
-
-/*#floatingHeader{*/
-/*    clear: both;*/
-/*    position: fixed;*/
-/*    width: 100%;*/
-/*    height: var(--headerHeight);*/
-/*    top: 5px;*/
-/*}*/
-
-/*#floatingHeader > body{*/
-/*    margin: auto;*/
-/*    text-align: center;*/
-/*}*/
 
 .spacer {
     width: 100%;
-    height: calc(var(--headerHeight));
+    height: calc(var(--headerHeight) * 2);
 }
 
 header {
@@ -29,11 +18,16 @@ header {
     top: 0;
     height: var(--headerHeight);
     width: 100%;
+    background-color: var(--tiffBlue);
 }
 
-/*body {*/
-/*    padding-top: 50;*/
-/*}*/
+p {
+    margin: var(--margin);
+}
+
+body {
+    text-align: center;
+}
 
 footer {
     text-align: center;
@@ -43,12 +37,12 @@ footer {
     width: 100%;
 }
 
-ul {
+.header {
+    margin: var(--margin);
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: var(--tiffBlue);
     height: 100%;
 }
 
@@ -73,4 +67,9 @@ li a:hover {
 
 .active {
     background-color: var(--orangePeel);
+}
+
+img {
+    max-height: 100%;
+    max-width: 100%;
 }
