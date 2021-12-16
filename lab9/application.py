@@ -40,5 +40,5 @@ def delete():
         id = request.form.get("birthdayID")
 
         db.execute("DELETE FROM birthdays WHERE id=?", id)
-
+        db.execute("UPDATE birthdays SET id=id-1 WHERE id>?", id - 1)
         return redirect("/")
