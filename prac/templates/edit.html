@@ -1,0 +1,19 @@
+<!Document html>
+
+<html lang="en">
+    <head>
+                <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="/static/style.css" rel="stylesheet">
+        <title>Edit Birthdays</title>
+    </head>
+    <!--Setup to edit birthdays-->
+    <!--Add text feilds-->
+    <form action="/edit" method="post">
+        <input type="text" name="name" value={{birthday.name}}>
+        <input type="number" name="month" value={{birthday.month}}>
+        <input type="number" name="day" value={{birthday.day}}>
+        <input type="submit" value="Edit Birthday">
+    </form>
+    <!--populate text feilds with current values-->
+    <!--edit the database-->
+</html>
