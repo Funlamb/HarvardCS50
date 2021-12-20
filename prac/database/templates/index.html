@@ -28,6 +28,7 @@
                             <th>Name</th>
                             <th>Birthday</th>
                             <th>Delete</th>
+                            <th>Edit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -38,7 +39,7 @@
                             <form action="/delete" method="post">
                                 <td><input type="submit" name="birthdayID" value={{birthday.id}}></td>
                             </form>
-                            <form action="/edit" method="post">
+                            <form action="/edit_screen" method="post">
                                 <td><input type="submit" name="editID" value={{birthday.id}}></td>
                             </form>
                         </tr>

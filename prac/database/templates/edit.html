@@ -7,13 +7,18 @@
         <title>Edit Birthdays</title>
     </head>
     <!--Setup to edit birthdays-->
+    <div class="container">
+        <h1>Edit Birthday</h1>
+    </div>
     <!--Add text feilds-->
-    <form action="/edit" method="post">
-        <input type="text" name="name" value={{birthday.name}}>
-        <input type="number" name="month" value={{birthday.month}}>
-        <input type="number" name="day" value={{birthday.day}}>
-        <input type="submit" value="Edit Birthday">
-    </form>
-    <!--populate text feilds with current values-->
-    <!--edit the database-->
+    <div class="section container" style="padding_top: 5rem">
+        <form action="/edit_DB" method="POST">
+            {% for item in birthday %}
+                <input type="text" name="name" value={{item.name}}>
+                <input type="number" name="month" value={{item.month}}>
+                <input type="number" name="day" value={{item.day}}>
+                <input type="submit" name="edit_id" value={{item.id}}>
+            {% endfor %}
+        </form>
+    </div>
 </html>
