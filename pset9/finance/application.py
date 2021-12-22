@@ -119,8 +119,20 @@ def quote():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """Register user"""
-    return apology("TODO")
+    if request.method == "post":
+        print ("post")
+        # register user
+        # check if name exists
+        # username = request.form.get("username")
+        # if not request.form.get("username"):
+        #     return apology("Must enter a username", 403)
+        # if exists have them put in a new name
+        # if doesn't exists check if they entered a password
+        # if they entered a password check if they repeated the password correctly
+        # if they did all those things reroute to login page
+    else:
+        # print ("Get")
+        return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
