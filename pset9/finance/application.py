@@ -114,7 +114,10 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        return apology("TODO")
+    else:
+        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -132,7 +135,7 @@ def register():
         if number_of_users_with_that_name == 1:
             return apology("That name is already in use")
 
-        # if check if user entered a password
+        # check if user entered a passwords and they match
         password = request.form.get("password")
         check_password = request.form.get("check_password")
         if not password:
@@ -141,8 +144,8 @@ def register():
             return apology("Must repeat your password")
         if password != check_password:
             return apology("Passwords must match")
-        # if they entered a password check if they repeated the password correctly
-        # if they did all those things reroute to login page
+        # add user to database
+        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password))
         return redirect("/")
     else:
         return render_template("register.html")
