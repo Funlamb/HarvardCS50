@@ -119,19 +119,32 @@ def quote():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "post":
-        print ("post")
+    if request.method == "POST":
         # register user
-        # check if name exists
-        # username = request.form.get("username")
-        # if not request.form.get("username"):
-        #     return apology("Must enter a username", 403)
-        # if exists have them put in a new name
-        # if doesn't exists check if they entered a password
+        # check if name is entered
+        username = request.form.get("username")
+        if not username:
+            return apology("Must enter a username", 403)
+
+        # if username already exists have them put in a new name
+        check_for_user = db.execute("SELECT COUNT(*) AS count FROM users WHERE username=?", username)
+        number_of_users_with_that_name = (check_for_user[0].get("count"))
+        if number_of_users_with_that_name == 1:
+            return apology("That name is already in use")
+
+        # if check if user entered a password
+        password = request.form.get("password")
+        check_password = request.form.get("check_password")
+        if not password:
+            return apology("Must enter a password")
+        if not check_password:
+            return apology("Must repeat your password")
+        if password != check_password:
+            return apology("Passwords must match")
         # if they entered a password check if they repeated the password correctly
         # if they did all those things reroute to login page
+        return redirect("/")
     else:
-        # print ("Get")
         return render_template("register.html")
 
 
