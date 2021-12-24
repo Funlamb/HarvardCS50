@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block addon %} Quote {% endblock %}
+
+{%block main%}
+<form action="/quoted" method="post">
+    <div class="form-group">
+        <input class="form-control" autofocus name="stock_name" placeholder="Stock Symbol">
+    </div>
+        <button class="btn btn-primary" type="submit">Get Quote</button>
+</form>
+{%endblock main%}
