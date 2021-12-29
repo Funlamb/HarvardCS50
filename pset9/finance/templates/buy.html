@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Buy Shares
+{% endblock title %}
+
+{% block main %}
+
+    <form action="/buy" method="post">
+        <div>
+            {% if cash %}
+            <h4>You have {{cash | usd}}.</h4>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="symbol" placeholder="Stock Symbol" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="shares" placeholder="Amount to buy" type="number">
+        </div>
+        <button class="btn btn-primary" type="submit">Buy</button>
+    </form>
+
+{% endblock main %}

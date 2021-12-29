@@ -46,14 +46,33 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-        return render_template("index.html")
+    return render_template("index.html")
 
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
-    """Buy shares of stock"""
-    return apology("TODO")
+    # get users cash on hand
+    user = db.execute("Select cash From users where id=?", session['user_id'])
+    cash_on_hand = user[0]['cash']
+    # get price of the stock
+    if request.method == "GET":
+        # display with users cash on hand
+        return render_template("buy.html", cash=cash_on_hand)
+    else:
+        """Buy shares of stock"""
+        # get users cash on hand
+        # make sure it is a valid stock
+        # make sure user is buying positive shares
+        # make sure user can purchase that many stocks
+        # purchase those stocks for the user
+        # put the stocks into the user's account
+        stock_data = lookup(request.form.get('symbol'))
+        stock_symbol = stock_data['symbol']
+        stock_name = stock_data['name']
+        stock_price = stock_data['price']
+        return apology("Work on buying stock")
+
 
 
 @app.route("/history")
@@ -115,9 +134,12 @@ def logout():
 def quote():
     """Get stock quote."""
     if request.method == "POST":
-        stock_symbol = request.form.get("stock_symbol").upper()
-        stock_name = lookup(stock_symbol)['name']
-        stock_price = lookup(stock_symbol)['price']
+        stock_data = lookup(request.form.get("symbol"))
+        if stock_dict == None:
+            return apology("Need a valid stock symbol")
+        stock_symbol = stock_data['symbol']
+        stock_name = stock_data['name']
+        stock_price = stock_data['price']
         return render_template("quoted.html", stock_name=stock_name, stock_symbol=stock_symbol, stock_price=stock_price)
     else:
         return render_template("quote.html")
@@ -130,17 +152,17 @@ def register():
         # check if name is entered
         username = request.form.get("username")
         if not username:
-            return apology("Must enter a username", 403)
+            return apology("Must enter a username", 400)
 
         # if username already exists have them put in a new name
-        check_for_user = db.execute("SELECT COUNT(*) AS count FROM users WHERE username=?", username)
+        check_for_user = db.execute("SELECT COUNT(*) AS count FROM users WHERE username=? LIMIT 1", username)
         number_of_users_with_that_name = (check_for_user[0].get("count"))
         if number_of_users_with_that_name == 1:
             return apology("That name is already in use")
 
         # check if user entered a passwords and they match
         password = request.form.get("password")
-        check_password = request.form.get("check_password")
+        check_password = request.form.get("confirmation")
         if not password:
             return apology("Must enter a password")
         if not check_password:
@@ -149,6 +171,8 @@ def register():
             return apology("Passwords must match")
         # add user to database
         db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password))
+        # rows = db.execute("SELECT id FROM users WHERE username = ?", username)
+        # session["user_id"] = rows[0]['id']
         return redirect("/")
     else:
         return render_template("register.html")
