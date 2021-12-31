@@ -61,16 +61,19 @@ def buy():
         return render_template("buy.html", cash=cash_on_hand)
     else:
         """Buy shares of stock"""
-        # get users cash on hand
         # make sure it is a valid stock
+        stock_data = lookup(request.form.get('symbol'))
+        if stock_data == None:
+            return apology("Invalid Stock Symbol")
+        # get users cash on hand
+        stock_symbol = stock_data['symbol']
+        stock_name = stock_data['name']
+        stock_price = stock_data['price']
+        print (stock_data)
         # make sure user is buying positive shares
         # make sure user can purchase that many stocks
         # purchase those stocks for the user
         # put the stocks into the user's account
-        stock_data = lookup(request.form.get('symbol'))
-        stock_symbol = stock_data['symbol']
-        stock_name = stock_data['name']
-        stock_price = stock_data['price']
         return apology("Work on buying stock")
 
 
@@ -135,7 +138,7 @@ def quote():
     """Get stock quote."""
     if request.method == "POST":
         stock_data = lookup(request.form.get("symbol"))
-        if stock_dict == None:
+        if stock_data == None:
             return apology("Need a valid stock symbol")
         stock_symbol = stock_data['symbol']
         stock_name = stock_data['name']
