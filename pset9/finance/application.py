@@ -61,18 +61,38 @@ def buy():
         return render_template("buy.html", cash=cash_on_hand)
     else:
         """Buy shares of stock"""
+        
+        # make sure user is buying positive shares
+        number_of_shares = int (request.form.get('shares'))
+        if number_of_shares < 0:
+            return apology("Please choose a positive number of shares")
+        
+        # make sure the number is a whole number
+        if not isinstance(number_of_shares, int):
+            return apology("Please enter a whole number")
+        
         # make sure it is a valid stock
         stock_data = lookup(request.form.get('symbol'))
         if stock_data == None:
             return apology("Invalid Stock Symbol")
-        # get users cash on hand
+            
         stock_symbol = stock_data['symbol']
         stock_name = stock_data['name']
         stock_price = stock_data['price']
-        print (stock_data)
-        # make sure user is buying positive shares
+        
         # make sure user can purchase that many stocks
-        # purchase those stocks for the user
+        cost_total_of_wanted_shares = number_of_shares * stock_price
+        if cash_on_hand < cost_total_of_wanted_shares:
+            return apology("You do not have enough capital to purchase these shares")
+        
+        # create the stock if it doesn't alread exist
+        check_for_stock = db.execute("SELECT COUNT(*) AS count FROM stocks WHERE symbol=? LIMIT 1", stock_symbol)
+        if check_for_stock[0]["count"] != 1:
+            db.execute("INSERT INTO stocks (symbol) VALUES (?)", stock_symbol)
+        
+        # create the transaction
+        
+        # remove money for users account
         # put the stocks into the user's account
         return apology("Work on buying stock")
 
