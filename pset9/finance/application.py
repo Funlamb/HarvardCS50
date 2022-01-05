@@ -91,9 +91,14 @@ def buy():
             db.execute("INSERT INTO stocks (symbol) VALUES (?)", stock_symbol)
         
         # create the transaction
-        
+        userID = user[id]
+        stockID = db.execute("SELECT id FROM stocks WHERE symbol = ?", stock_symbol)
+        db.execute("INSERT INTO transactions (userID, stockID, quantity, price) VALUES (?, ?, ?, ?)", userID, stockID, number_of_shares, stock_price)
         # remove money for users account
+        remaining_cash = cash_on_hand - cost_total_of_wanted_shares
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, userID)
         # put the stocks into the user's account
+        # I don't think I need to do this. I could just get all the transactions with the user's ID
         return apology("Work on buying stock")
 
 
