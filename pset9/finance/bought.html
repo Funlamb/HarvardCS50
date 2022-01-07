@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Bought Shares
+{% endblock title %}
+
+{% block main %}
+
+    <!--Display the the user they bought the specific amount of shares. -->
+    <div>
+        {% if cash %}
+        <h4>You bought {{shares}} of {{stock}} at {{cost_of_stock | usd}} worth {{cash | usd}} on {{time}}.</h4>
+        {% endif %}
+    </div>
+
+{% endblock main %}

@@ -1,4 +1,4 @@
-import os
+import os, time, datetime
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -61,49 +61,46 @@ def buy():
         return render_template("buy.html", cash=cash_on_hand)
     else:
         """Buy shares of stock"""
-        
+
         # make sure user is buying positive shares
         number_of_shares = int (request.form.get('shares'))
         if number_of_shares < 0:
             return apology("Please choose a positive number of shares")
-        
+
         # make sure the number is a whole number
         if not isinstance(number_of_shares, int):
             return apology("Please enter a whole number")
-        
+
         # make sure it is a valid stock
         stock_data = lookup(request.form.get('symbol'))
         if stock_data == None:
             return apology("Invalid Stock Symbol")
-            
+
         stock_symbol = stock_data['symbol']
         stock_name = stock_data['name']
         stock_price = stock_data['price']
-        
+
         # make sure user can purchase that many stocks
         cost_total_of_wanted_shares = number_of_shares * stock_price
         if cash_on_hand < cost_total_of_wanted_shares:
             return apology("You do not have enough capital to purchase these shares")
-        
+
         # create the stock if it doesn't alread exist
         check_for_stock = db.execute("SELECT COUNT(*) AS count FROM stocks WHERE symbol=? LIMIT 1", stock_symbol)
         if check_for_stock[0]["count"] != 1:
             db.execute("INSERT INTO stocks (symbol) VALUES (?)", stock_symbol)
-        
+
         # create the transaction
         userID = session['user_id'] #session['user_id'] returns {'id':1}
         stockID = db.execute("SELECT id FROM stocks WHERE symbol = ?", stock_symbol)
-        print(userID)
-        print(stockID[0]['id'])
-        db.execute("INSERT INTO transactions (userID, stockID, quantity, price) VALUES (?, ?, ?, ?)", userID, stockID[0]['id'], number_of_shares, stock_price)
+        date_time_of_trade = datetime.datetime.now()
+        db.execute("INSERT INTO transactions (userID, stockID, quantity, price, time) VALUES (?, ?, ?, ?, ?)", userID, stockID[0]['id'], number_of_shares, stock_price, date_time_of_trade)
+
         # remove money for users account
         remaining_cash = cash_on_hand - cost_total_of_wanted_shares
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, stockID[0]['id'])
-        # put the stocks into the user's account
-        # I don't think I need to do this. I could just get all the transactions with the user's ID
-        return apology("Work on buying stock")
 
-
+        return render_template("bought.html", shares=number_of_shares, stock=stock_name, cost_of_stock=stock_price, cash=cost_total_of_wanted_shares, time=date_time_of_trade)
 
 @app.route("/history")
 @login_required
