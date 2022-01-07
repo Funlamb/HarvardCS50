@@ -46,7 +46,30 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return render_template("index.html")
+    # get user's stock
+    # Complete the implementation of index in such a way that it displays an HTML table summarizing,
+    # for the user currently logged in,
+    # which stocks the user owns,
+    # the numbers of shares owned,
+    stocks = db.execute("SELECT stocks.symbol, SUM(transactions.quantity) FROM users JOIN transactions ON transactions.userID=users.id JOIN stocks ON transactions.stockID=stocks.id WHERE users.id=? GROUP BY stocks.symbol", session['user_id'])
+    # the current price of each stock,
+    value_of_users_stocks = 0
+    for x in stocks:
+        # find the stock price and name
+        stock = lookup(x['symbol'])
+        # add it to current dict
+        x['stock_name'] = stock['name']
+        x['stock_price'] = stock['price']
+        x['stocks_value'] = stock['price'] * x['SUM(transactions.quantity)']
+        value_of_users_stocks = value_of_users_stocks + x['stocks_value']
+    print(stocks)
+    # users cash on hand
+    cash = db.execute('SELECT * FROM users WHERE id=?', session['user_id'])[0]['cash']
+    print(cash)
+    value_of_users_stocks = value_of_users_stocks + cash
+    # and the total value of each holding (i.e., shares times price).
+    # Also display the user’s current cash balance along with a grand total (i.e., stocks’ total value plus cash).
+    return render_template("index.html", stocks=stocks, cash=cash, value_of_users_stocks=value_of_users_stocks)
 
 
 @app.route("/buy", methods=["GET", "POST"])
