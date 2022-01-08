@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock title %}
+
+{% block main %}
+    <table class="table tablestriped">
+        <thead>
+            <tr>
+                <th class="text-start">Symbol</th>
+                <th class="text-start">Name</th>
+                <th class="text-end">Shares</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in stocks %}
+                <tr>
+                    <td class="border-0 fw-bold text-end">{{s['symbol']}}</td>
+                    <td class="border-0 fw-bold text-end">{{s['stock_name']}}</td>
+                    <td class="border-0 fw-bold text-end">{{s['SUM(transactions.quantity)']}}</td>
+                    <td class="border-0 fw-bold text-end">{{s['stock_price']}}</td>
+                    <td class="border-0 fw-bold text-end">{{s['stocks_value'] | usd}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="4">Cash</td>
+                <td class="border-0 text-end">{% if cash %} {{cash | usd}} {% endif %}</td>
+            </tr>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="4">TOTAL</td>
+                <td class="border-0 w-bold text-end">{% if value_of_users_stocks %} {{value_of_users_stocks | usd}} {% endif %}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+{% endblock main %}
