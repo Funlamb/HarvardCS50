@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sold
+{% endblock title %}
+
+{% block main %}
+    <!--Display the the user they sold the specific amount of shares. -->
+    <div>
+        {% if shares %}
+        <h4>You sold {{shares}} of {{stock}} at {{cost_of_stock | usd}} worth {{cash | usd}} on {{time}}.</h4>
+        {% endif %}
+    </div>
+{% endblock main %}

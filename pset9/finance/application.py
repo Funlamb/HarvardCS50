@@ -118,7 +118,7 @@ def buy():
         # remove money for users account
         remaining_cash = cash_on_hand - cost_total_of_wanted_shares
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, stockID[0]['id'])
-
+        print(cost_total_of_wanted_shares)
         return render_template("bought.html", shares=number_of_shares, stock=stock_name, cost_of_stock=stock_price, cash=cost_total_of_wanted_shares, time=date_time_of_trade)
 
 @app.route("/history")
@@ -253,10 +253,12 @@ def sell():
         # add money to users account
         cash_on_hand = db.execute("SELECT cash FROM users WHERE id=?", session['user_id'])
         cash_on_hand = cash_on_hand[0]['cash']
-        cost_total_of_sold_shares = stock_price * quantity_to_sell
+        cost_total_of_sold_shares = stock_price * quantity_to_sell * -1
         remaining_cash = cash_on_hand + cost_total_of_sold_shares
+        # print("Here ") # + cost_total_of_sold_shares)
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, session['user_id'])
-        return apology("Working on selling stocks")
+        cost_of_shares = cost_total_of_sold_shares
+        return render_template("sold.html", shares=quantity_to_sell, stock=stock_data['symbol'], cost_of_stock=stock_price, cash=cost_of_shares, time=date_time_of_trade)
     # get list of users stocks
     else:
         stocks = db.execute("SELECT stocks.symbol FROM stocks JOIN transactions ON transactions.stockID=stocks.id WHERE transactions.userID=? GROUP BY stocks.symbol", session['user_id'])
