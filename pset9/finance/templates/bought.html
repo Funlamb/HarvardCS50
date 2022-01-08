@@ -4,12 +4,16 @@
     Bought Shares
 {% endblock title %}
 
+{% block addon %}
+    Bought
+{% endblock %}
+
 {% block main %}
 
     <!--Display the the user they bought the specific amount of shares. -->
     <div>
         {% if cash %}
-        <h4>You bought {{shares}} of {{stock}} at {{cost_of_stock | usd}} worth {{cash | usd}} on {{time}}.</h4>
+        <h4>You bought {{shares}} shares of {{stock}} at {{cost_of_stock | usd}} worth {{cash | usd}} on {{time}}.</h4>
         {% endif %}
     </div>
 
