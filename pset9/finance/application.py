@@ -47,11 +47,8 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
     # get user's stock
-    # Complete the implementation of index in such a way that it displays an HTML table summarizing,
-    # for the user currently logged in,
-    # which stocks the user owns,
-    # the numbers of shares owned,
     stocks = db.execute("SELECT stocks.symbol, SUM(transactions.quantity) FROM users JOIN transactions ON transactions.userID=users.id JOIN stocks ON transactions.stockID=stocks.id WHERE users.id=? GROUP BY stocks.symbol", session['user_id'])
+
     # the current price of each stock,
     value_of_users_stocks = 0
     for x in stocks:
@@ -62,13 +59,12 @@ def index():
         x['stock_price'] = stock['price']
         x['stocks_value'] = stock['price'] * x['SUM(transactions.quantity)']
         value_of_users_stocks = value_of_users_stocks + x['stocks_value']
-    print(stocks)
+
     # users cash on hand
     cash = db.execute('SELECT * FROM users WHERE id=?', session['user_id'])[0]['cash']
-    print(cash)
+
+    # users total assets
     value_of_users_stocks = value_of_users_stocks + cash
-    # and the total value of each holding (i.e., shares times price).
-    # Also display the user’s current cash balance along with a grand total (i.e., stocks’ total value plus cash).
     return render_template("index.html", stocks=stocks, cash=cash, value_of_users_stocks=value_of_users_stocks)
 
 
@@ -231,8 +227,40 @@ def register():
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
-    """Sell shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        """Sell shares of stock"""
+        stock_to_sell = request.form.get("symbol")
+        quantity_to_sell = int(request.form.get("shares"))
+
+        # find out how many shares of that stock the user has
+        stocks = db.execute("SELECT stocks.symbol, SUM(transactions.quantity) FROM users JOIN transactions ON transactions.userID=users.id JOIN stocks ON transactions.stockID=stocks.id WHERE users.id=? AND stocks.symbol=? GROUP BY stocks.symbol", session['user_id'], stock_to_sell)
+
+        # test if user has sufficiant stocks to sell
+        if stocks[0]['SUM(transactions.quantity)'] < quantity_to_sell:
+            return apology('You do not have enough shares to sell')
+
+        # enter in the transaction
+        stock_data = lookup(request.form.get("symbol"))
+        if stock_data == None:
+            return apology("Need a valid stock symbol")
+        stock_price = stock_data['price']
+        # get stockID
+        stockID = db.execute("SELECT id FROM stocks WHERE symbol=?", stock_to_sell)[0]['id']
+        quantity_to_sell = quantity_to_sell * -1
+        date_time_of_trade = datetime.datetime.now()
+        db.execute("INSERT INTO transactions (userID, stockID, quantity, price, time) VALUES (?, ?, ?, ?, ?)", session['user_id'], stockID, quantity_to_sell, stock_price, date_time_of_trade)
+
+        # add money to users account
+        cash_on_hand = db.execute("SELECT cash FROM users WHERE id=?", session['user_id'])
+        cash_on_hand = cash_on_hand[0]['cash']
+        cost_total_of_sold_shares = stock_price * quantity_to_sell
+        remaining_cash = cash_on_hand + cost_total_of_sold_shares
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, session['user_id'])
+        return apology("Working on selling stocks")
+    # get list of users stocks
+    else:
+        stocks = db.execute("SELECT stocks.symbol FROM stocks JOIN transactions ON transactions.stockID=stocks.id WHERE transactions.userID=? GROUP BY stocks.symbol", session['user_id'])
+        return render_template("sell.html", stocks=stocks)
 
 
 def errorhandler(e):
