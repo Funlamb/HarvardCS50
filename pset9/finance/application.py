@@ -47,7 +47,7 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
     # get user's stock
-    stocks = db.execute("SELECT stocks.symbol, SUM(transactions.quantity) FROM users JOIN transactions ON transactions.userID=users.id JOIN stocks ON transactions.stockID=stocks.id WHERE users.id=? GROUP BY stocks.symbol", session['user_id'])
+    stocks = db.execute("SELECT stocks.symbol, SUM(transactions.quantity) FROM users JOIN transactions ON transactions.userID=users.id JOIN stocks ON transactions.stockID=stocks.id WHERE users.id=? GROUP BY stocks.symbol HAVING SUM(transactions.quantity) > 0", session['user_id'])
 
     # the current price of each stock,
     value_of_users_stocks = 0
@@ -261,7 +261,7 @@ def sell():
         return render_template("sold.html", shares=quantity_to_sell, stock=stock_data['symbol'], cost_of_stock=stock_price, cash=cost_of_shares, time=date_time_of_trade)
     # get list of users stocks
     else:
-        stocks = db.execute("SELECT stocks.symbol FROM stocks JOIN transactions ON transactions.stockID=stocks.id WHERE transactions.userID=? GROUP BY stocks.symbol", session['user_id'])
+        stocks = db.execute("SELECT stocks.symbol FROM stocks JOIN transactions ON transactions.stockID=stocks.id WHERE transactions.userID=? GROUP BY stocks.symbol HAVING SUM(transactions.quantity) > 0", session['user_id'])
         return render_template("sell.html", stocks=stocks)
 
 
