@@ -48,7 +48,11 @@ if not os.environ.get("API_KEY"):
 def index():
     """Show portfolio of stocks"""
     # get user's stock
+<<<<<<< HEAD
     stocks = get_users_stocks()
+=======
+    stocks = db.execute("SELECT stocks.symbol, SUM(transactions.quantity) FROM users JOIN transactions ON transactions.userID=users.id JOIN stocks ON transactions.stockID=stocks.id WHERE users.id=? GROUP BY stocks.symbol HAVING SUM(transactions.quantity) > 0", session['user_id'])
+>>>>>>> f61beb76c83bb0bb3e81c044d9e80c98a7413797
 
     # the current price of each stock,
     value_of_users_stocks = 0
@@ -116,10 +120,15 @@ def buy():
         # remove money for users account
         remaining_cash = cash_on_hand - cost_total_of_wanted_shares
         db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, stockID[0]['id'])
+<<<<<<< HEAD
 
         # return render_template("bought.html", shares=number_of_shares, stock=stock_name, cost_of_stock=stock_price, cash=cost_total_of_wanted_shares, time=date_time_of_trade)
         return redirect("/")
 
+=======
+        print(cost_total_of_wanted_shares)
+        return render_template("bought.html", shares=number_of_shares, stock=stock_name, cost_of_stock=stock_price, cash=cost_total_of_wanted_shares, time=date_time_of_trade)
+>>>>>>> f61beb76c83bb0bb3e81c044d9e80c98a7413797
 
 @app.route("/history")
 @login_required
@@ -263,6 +272,7 @@ def sell():
                    session['user_id'], stockID, quantity_to_sell, stock_price, date_time_of_trade)
 
         # add money to users account
+<<<<<<< HEAD
         users_current_cash = get_users_cash()
         value_of_shares_sold = stock_price * quantity_to_sell * -1
         user_new_cash_balance = users_current_cash + value_of_shares_sold
@@ -273,6 +283,19 @@ def sell():
     # get list of users stocks
     else:
         stocks = get_users_stocks()
+=======
+        cash_on_hand = db.execute("SELECT cash FROM users WHERE id=?", session['user_id'])
+        cash_on_hand = cash_on_hand[0]['cash']
+        cost_total_of_sold_shares = stock_price * quantity_to_sell * -1
+        remaining_cash = cash_on_hand + cost_total_of_sold_shares
+        # print("Here ") # + cost_total_of_sold_shares)
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", remaining_cash, session['user_id'])
+        cost_of_shares = cost_total_of_sold_shares
+        return render_template("sold.html", shares=quantity_to_sell, stock=stock_data['symbol'], cost_of_stock=stock_price, cash=cost_of_shares, time=date_time_of_trade)
+    # get list of users stocks
+    else:
+        stocks = db.execute("SELECT stocks.symbol FROM stocks JOIN transactions ON transactions.stockID=stocks.id WHERE transactions.userID=? GROUP BY stocks.symbol HAVING SUM(transactions.quantity) > 0", session['user_id'])
+>>>>>>> f61beb76c83bb0bb3e81c044d9e80c98a7413797
         return render_template("sell.html", stocks=stocks)
 
 
